@@ -4,14 +4,13 @@
 [ext_resource path="res://src/boid/Boid.gd" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 97.231
+radius = 99.1093
 
 [node name="Boid" type="KinematicBody2D"]
 scale = Vector2( 0.1, 0.1 )
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
