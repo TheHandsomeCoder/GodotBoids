@@ -20,6 +20,7 @@ func _process(delta: float) -> void:
 func _updatePosition(position: Vector2, velocity: Vector2, delta: float) -> Vector2:
 	_velocity = Vector2.ZERO;
 	_velocity = _calculateCohesion()
+	_velocity = (_velocity - position).normalized() * _speed
 	return position + _velocity * delta
 
 
