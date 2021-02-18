@@ -19,8 +19,12 @@ func _process(delta: float) -> void:
 
 func _updatePosition(position: Vector2, velocity: Vector2, delta: float) -> Vector2:
 	_velocity = Vector2.ZERO;
-	_velocity = _calculateCohesion()
+	var coh = _calculateCohesion()
+	var sep = _calculateSeparation()
+	print(coh, sep)
+	_velocity = coh+sep
 	_velocity = (_velocity - position).normalized() * _speed
+
 	return position + _velocity * delta
 
 
@@ -35,9 +39,39 @@ func _updatePositionToFollowMouse(position: Vector2, velocity: Vector2, rotation
 	return position + _velocity * delta
 
 func _calculateCohesion() -> Vector2:
-	var flock = self.get_parent().get_children();
+	var flock = self.get_parent().get_children()
 	var targetPos = Vector2.ZERO
 	for boid in flock:
 		targetPos += boid.position
 	
 	return targetPos / flock.size()
+
+
+# if ((d > 0) && (d < desiredseparation)) {
+#        // Calculate vector pointing away from neighbor
+#        PVector diff = PVector.sub(position, other.position);
+#        diff.normalize();
+#        diff.div(d);        // Weight by distance
+#        steer.add(diff);
+#        count++;            // Keep track of how many
+#      }
+
+func _calculateSeparation() -> Vector2:
+	var minDistance = 25.0;
+	var flock = self.get_parent().get_children()
+	var targetPos = Vector2.ZERO
+	var count = 0;
+	for boid in flock:
+		var distance = position.distance_to(boid.position)		
+		if(distance > 0 && distance < minDistance):
+			var differance: Vector2 = position - boid.position
+			differance = differance.normalized()
+			differance =  differance/distance
+			targetPos += differance
+			count += 1
+
+	if(count > 0):
+		 targetPos /= count;
+	
+	return targetPos.normalized() * _speed
+		
